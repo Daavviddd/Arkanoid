@@ -40,6 +40,8 @@
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
             Load += Game_form_Load;
+            Paint += Game_form_Paint;
+            KeyDown += Game_form_KeyDown;
             KeyPress += Game_form_KeyPress;
             ResumeLayout(false);
         }
