@@ -1,6 +1,6 @@
 ﻿namespace Arkanoid
 {
-    partial class Game_form
+    partial class GameForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,16 +30,18 @@
         {
             SuspendLayout();
             // 
-            // Game_form
+            // GameForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "Game_form";
+            Name = "GameForm";
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
             Load += Game_form_Load;
+            ResizeEnd += GameForm_ResizeEnd;
+            Paint += GameForm_Paint;
             KeyDown += Game_form_KeyDown;
             MouseMove += Game_form_MouseMove;
             ResumeLayout(false);

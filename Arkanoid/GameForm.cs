@@ -2,67 +2,71 @@ using Arkanoid.Clases;
 
 namespace Arkanoid
 {
-    public partial class Game_form : Form
-    {
+    public partial class GameForm : Form
+    {   
+        int ballSize = 20;
+        int ballOffset = 150;
+
         List<PictureBox> bricksPoint = new List<PictureBox>();
         RoundedPlatform platform;
-        int numberOfBricks = 12;
-        float brickWidth = 0;
-        int brickHeight = 50;
-        int platformWidth = 150;
-        int platformHeight = 30;
-        float brickX = 0, brickY = 0;
-        /// <summary>
-        /// флаг начала игры
-        /// </summary>
-        private bool gameStarted = false;
-        private Ball ball;
-        private System.Windows.Forms.Timer gameTimer;
-        public Game_form()
+        bool gameStarted = false;
+        Ball ball;
+        System.Windows.Forms.Timer gameTimer;
+
+        public GameForm()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
             this.KeyPreview = true;
-
-            this.MouseMove += Game_form_MouseMove;
-            this.KeyDown += Game_form_KeyDown;
 
             CreateControlsLabel();
 
             ball = new Ball(
-                startX: this.Width / 2 - 10,
-                startY: this.Height - 150,
+                startX: this.Width / 2 - ballSize / 2,
+                startY: this.Height - ballOffset,
                 velocityX: 0,
                 velocityY: 0,
-                size: 20
+                size: ballSize
             );
 
-            this.Controls.Add(ball);
-            ball.BringToFront();
+            var timerInterval = 16;
 
             gameTimer = new System.Windows.Forms.Timer();
-            gameTimer.Interval = 16;
+            gameTimer.Interval = timerInterval;
             gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Start(); 
+            gameTimer.Start();
         }
+
         /// <summary>
         /// Создание кирпичей
         /// </summary>
         private void MakingBricks()
         {
-            brickWidth = this.Width / 13;
+            var bricksPerRow = 12;
+            var brickRows = 5;
+            var brickHeight = 50;
+            var brickSpacing = 5;
+            var brickMargin = 2;
+            float availableWidth = this.Width - (2 * brickMargin) - ((bricksPerRow - 1) * brickSpacing);
+            float brickWidth = availableWidth / bricksPerRow;
+            
+
             Color[] colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.DarkBlue };
-            for (int i = 0; i <= 4; i++)
+
+            for (int i = 0; i < brickRows; i++)
             {
-                for (int j = 0; j <= numberOfBricks; j++)
+                for (int j = 0; j < bricksPerRow; j++)
                 {
-                    brickX = 2 + j * (brickWidth + 5);
-                    brickY = 2 + i * (brickHeight + 5);
+                    float brickX = brickMargin + j * (brickWidth + brickSpacing);
+                    float brickY = brickMargin + i * (brickHeight + brickSpacing);
+
                     PictureBox brick = new PictureBox();
                     brick.Location = new Point((int)brickX, (int)brickY);
                     brick.Height = brickHeight;
                     brick.Width = (int)brickWidth;
                     brick.BackColor = colors[i];
                     brick.BorderStyle = BorderStyle.FixedSingle;
+
                     this.Controls.Add(brick);
                     bricksPoint.Add(brick);
                 }
@@ -73,7 +77,7 @@ namespace Arkanoid
         {
             MakingBricks();
             Platform();
-            ball.Location = new Point(this.Width / 2 - 10, this.Height - 150);
+            ball.Location = new Point(this.Width / 2 - ballSize / 2, this.Height - ballOffset);
         }
 
         /// <summary>
@@ -81,35 +85,41 @@ namespace Arkanoid
         /// </summary>
         private void Platform()
         {
-            int bottomX, bottomY;
-            bottomX = (this.Width - platformWidth) / 2;
-            bottomY = this.Height - platformHeight - 100;
-            platform = new RoundedPlatform();
-            platform.Location = new Point(bottomX, bottomY);
-            platform.Height = platformHeight;
-            platform.Width = platformWidth;
-            this.Controls.Add(platform);
-            platform.BringToFront();
+            var platformWidth = 150;
+            var platformHeight = 30;
+            var platformOffset = 100;
+
+            var bottomX = (this.Width - platformWidth) / 2;
+            var bottomY = this.Height - platformHeight - platformOffset;
+
+            platform = new RoundedPlatform(bottomX, bottomY, platformWidth, platformHeight);
         }
 
         private void CheckCollisions()
         {
             if (ball.Left <= 0 || ball.Right >= this.Width)
+            {
                 ball.BounceVertical();
+            }
 
             if (ball.Top <= 0)
-                ball.BounceHorizontal();
-
-            if (ball.Bounds.IntersectsWith(platform.Bounds))
-                ball.BounceHorizontal();
-
-            foreach (var brick in bricksPoint.ToList())
             {
+                ball.BounceHorizontal();
+            }
+
+            if (ball.Bounds.IntersectsWith(platform.Bounds) && ball.VelocityY > 0)
+            {
+                ball.BounceHorizontal();
+            }
+
+            for (int i = bricksPoint.Count - 1; i >= 0; i--)
+            {
+                var brick = bricksPoint[i];
                 if (ball.Bounds.IntersectsWith(brick.Bounds))
                 {
                     ball.BounceHorizontal();
                     this.Controls.Remove(brick);
-                    bricksPoint.Remove(brick);
+                    bricksPoint.RemoveAt(i);
                     break;
                 }
             }
@@ -127,9 +137,10 @@ namespace Arkanoid
             {
                 gameTimer.Stop();
                 MessageBox.Show("YOU WIN!", "Победа!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close(); 
+                this.Close();
             }
         }
+
         private void GameTimer_Tick(object sender, EventArgs e)
         {
             if (gameStarted)
@@ -142,38 +153,38 @@ namespace Arkanoid
 
         private void Game_form_MouseMove(object sender, MouseEventArgs e)
         {
-            if (platform != null)
+            int newX = e.X - platform.Width / 2;
+
+            if (newX < 0)
             {
-                int newX = e.X - platform.Width / 2;
+                newX = 0;
+            }
+            if (newX > this.Width - platform.Width)
+            {
+                newX = this.Width - platform.Width;
+            }
 
-                if (newX < 0) { newX = 0; }
-                if (newX > this.Width - platform.Width)
-                {
-                    newX = this.Width - platform.Width;
-                }
-
-
-                platform.Location = new Point(newX, platform.Location.Y);
-                if (!gameStarted && ball != null)
-                {
-                    ball.Location = new Point(newX + platform.Width / 2 - ball.Width / 2,
-                                            ball.Location.Y);
-                }
+            platform.SetLocation(newX, platform.Location.Y);
+            if (!gameStarted)
+            {
+                ball.Location = new Point(newX + platform.Width / 2 - ball.Width / 2, ball.Location.Y);
             }
         }
+
         /// <summary>
         /// Обработка пробела и esc
         /// </summary>
         private void Game_form_KeyDown(object sender, KeyEventArgs e)
         {
+            var ballSpeed = 5;
             switch (e.KeyCode)
             {
                 case Keys.Space:
                     if (!gameStarted)
                     {
                         gameStarted = true;
-                        ball.VelocityX = 5;
-                        ball.VelocityY = -5;
+                        ball.VelocityX = ballSpeed;
+                        ball.VelocityY = -ballSpeed;
                     }
                     break;
 
@@ -190,6 +201,29 @@ namespace Arkanoid
                     break;
             }
         }
+
+        private void DrawBall(Graphics g, Ball ball)
+        {
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.FillEllipse(Brushes.White, ball.Bounds);
+            g.DrawEllipse(Pens.Black, ball.Bounds);
+        }
+
+        private void GameForm_Paint(object sender, PaintEventArgs e)
+        {
+            platform.Draw(e.Graphics);
+            DrawBall(e.Graphics, ball);
+        }
+
+        private void GameForm_ResizeEnd(object sender, EventArgs e)
+        {
+            var controlsLabel = this.Controls.Find("controlsLabel", false).FirstOrDefault();
+            if (controlsLabel != null)
+            {
+                controlsLabel.Location = new Point(10, this.Height - 30);
+            }
+        }
+
         private void CreateControlsLabel()
         {
             Label controlsLabel = new Label
@@ -199,21 +233,12 @@ namespace Arkanoid
                 BackColor = Color.Transparent,
                 Font = new Font("Arial", 9, FontStyle.Bold),
                 ForeColor = Color.DarkBlue,
-                Location = new Point(10, this.Height - 30),
-                Name = "controlsLabel"
+                Location = new Point(10, this.ClientSize.Height - 30),
+                Name = "controlsLabel",
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Left
             };
             this.Controls.Add(controlsLabel);
             controlsLabel.BringToFront();
-        }
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-
-            var controlsLabel = this.Controls.Find("controlsLabel", false).FirstOrDefault();
-            if (controlsLabel != null)
-            {
-                controlsLabel.Location = new Point(10, this.Height - 30);
-            }
         }
     }
 }

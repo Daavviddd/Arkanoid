@@ -2,39 +2,52 @@
 
 namespace Arkanoid.Clases
 {
-    public class RoundedPlatform : Control
+    public class RoundedPlatform
     {
-        private int cornerRadius = 15;
+        public Point Location { get; set; }
+        public Size Size { get; set; }
+        public Color Color { get; set; } = Color.Black;
+        public int CornerRadius { get; set; } = 15;
+        public int X => Location.X;
+        public int Y => Location.Y;
+        public int Width => Size.Width;
+        public int Height => Size.Height;
+        public Rectangle Bounds => new Rectangle(Location, Size);
+        public RoundedPlatform() { }
 
-        public RoundedPlatform()
+        public RoundedPlatform(int x, int y, int width, int height)
         {
-            BackColor = Color.Black;
-            SetStyle(ControlStyles.AllPaintingInWmPaint |
-                  ControlStyles.UserPaint |
-                  ControlStyles.ResizeRedraw, true);
+            Location = new Point(x, y);
+            Size = new Size(width, height);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
+        public void SetLocation(int x, int y)
         {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            Location = new Point(x, y);
+        }
 
-            using (GraphicsPath path = CreateRoundedRectanglePath(0, 0, Width, Height, cornerRadius))
+        /// <summary>
+        /// Отрисовка платформы
+        /// </summary>
+        public void Draw(Graphics g)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+            using (GraphicsPath path = CreateRoundedRectanglePath(0, 0, Width, Height, CornerRadius))
+            using (var brush = new SolidBrush(Color))
             {
-                Region = new Region(path);
-
-                using (SolidBrush brush = new SolidBrush(BackColor))
-                {
-                    e.Graphics.FillPath(brush, path);
-                }
+                g.TranslateTransform(Location.X, Location.Y);
+                g.FillPath(brush, path);
+                g.ResetTransform();
             }
         }
+
         /// <summary>
         /// Создание скруглкнной платформы
         /// </summary>
         private GraphicsPath CreateRoundedRectanglePath(int x, int y, int width, int height, int radius)
         {
             GraphicsPath path = new GraphicsPath();
-
             Rectangle rect = new Rectangle(x, y, width - 1, height - 1);
 
             path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
@@ -44,13 +57,6 @@ namespace Arkanoid.Clases
             path.CloseAllFigures();
 
             return path;
-        }
-
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            Invalidate();
         }
     }
 }

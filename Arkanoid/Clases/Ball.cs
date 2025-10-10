@@ -2,41 +2,28 @@
 
 namespace Arkanoid.Clases
 {
-    internal class Ball: PictureBox
+    internal class Ball
     {
+        public Point Location { get; set; }
+        public Size Size { get; set; }
         public int VelocityX { get; set; }
         public int VelocityY { get; set; }
+        public int X => Location.X;
+        public int Y => Location.Y;
+        public int Width => Size.Width;
+        public int Height => Size.Height;
+        public int Left => Location.X;
+        public int Right => Location.X + Width;
+        public int Top => Location.Y;
+        public int Bottom => Location.Y + Height;
+        public Rectangle Bounds => new Rectangle(Location, Size);
+
         public Ball(int startX, int startY, int velocityX, int velocityY, int size)
         {
             this.Location = new Point(startX, startY);
             this.Size = new Size(size, size);
             this.VelocityX = velocityX;
             this.VelocityY = velocityY;
-
-            this.BackColor = Color.Transparent;
-
-            CreateBallImage();
-        }
-        private void CreateBallImage()
-        {
-            Bitmap bmp = new Bitmap(this.Width, this.Height);
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.Clear(Color.Transparent);
-
-                using (SolidBrush brush = new SolidBrush(Color.White))
-                {
-                    g.FillEllipse(brush, 0, 0, this.Width - 1, this.Height - 1);
-                }
-
-                using (Pen pen = new Pen(Color.Black, 2))
-                {
-                    g.DrawEllipse(pen, 0, 0, this.Width - 1, this.Height - 1);
-                }
-            }
-
-            this.Image = bmp;
         }
 
         public void BallMove()
@@ -45,37 +32,16 @@ namespace Arkanoid.Clases
             int newY = this.Location.Y + VelocityY;
             this.Location = new Point(newX, newY);
         }
+
         public void BounceHorizontal()
         {
             VelocityY = -VelocityY;
         }
+
         public void BounceVertical()
         {
             VelocityX = -VelocityX;
         }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            using (GraphicsPath path = new GraphicsPath())
-            {
-                path.AddEllipse(0, 0, this.Width - 1, this.Height - 1);
-
-                using (SolidBrush brush = new SolidBrush(Color.White))
-                {
-                    e.Graphics.FillPath(brush, path);
-                }
-
-                using (Pen pen = new Pen(Color.Black, 2))
-                {
-                    e.Graphics.DrawPath(pen, path);
-                }
-            }
-        }
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            Invalidate();
-        }
     }
 }
