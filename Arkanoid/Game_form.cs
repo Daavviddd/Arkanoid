@@ -21,10 +21,8 @@ namespace Arkanoid
         public Game_form()
         {
             InitializeComponent();
-            this.BackColor = Color.SkyBlue;
             this.KeyPreview = true;
 
-            // Подписываемся на события
             this.MouseMove += Game_form_MouseMove;
             this.KeyDown += Game_form_KeyDown;
 
@@ -124,10 +122,12 @@ namespace Arkanoid
                     this.Close();
                 }
             }
+
             if (bricksPoint.Count == 0)
             {
                 gameTimer.Stop();
                 MessageBox.Show("YOU WIN!", "Победа!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close(); 
             }
         }
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -204,6 +204,16 @@ namespace Arkanoid
             };
             this.Controls.Add(controlsLabel);
             controlsLabel.BringToFront();
+        }
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            var controlsLabel = this.Controls.Find("controlsLabel", false).FirstOrDefault();
+            if (controlsLabel != null)
+            {
+                controlsLabel.Location = new Point(10, this.Height - 30);
+            }
         }
     }
 }
