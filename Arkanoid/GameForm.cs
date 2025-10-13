@@ -1,4 +1,4 @@
-using System.Drawing.Drawing2D;
+п»їusing System.Drawing.Drawing2D;
 using Arkanoid.Clases;
 
 namespace Arkanoid
@@ -39,7 +39,7 @@ namespace Arkanoid
         }
 
         /// <summary>
-        /// Создание кирпичей
+        /// РЎРѕР·РґР°РЅРёРµ РєРёСЂРїРёС‡РµР№
         /// </summary>
         private void MakingBricks()
         {
@@ -82,7 +82,7 @@ namespace Arkanoid
         }
 
         /// <summary>
-        /// генерация платформы
+        /// РіРµРЅРµСЂР°С†РёСЏ РїР»Р°С‚С„РѕСЂРјС‹
         /// </summary>
         private void CreatePlatform()
         {
@@ -137,7 +137,7 @@ namespace Arkanoid
             if (bricksPoint.Count == 0)
             {
                 gameTimer.Stop();
-                MessageBox.Show("YOU WIN!", "Победа!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("YOU WIN!", "РџРѕР±РµРґР°!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
         }
@@ -173,7 +173,7 @@ namespace Arkanoid
         }
 
         /// <summary>
-        /// Обработка пробела и esc
+        /// РћР±СЂР°Р±РѕС‚РєР° РїСЂРѕР±РµР»Р° Рё esc
         /// </summary>
         private void Game_form_KeyDown(object sender, KeyEventArgs e)
         {
@@ -191,7 +191,7 @@ namespace Arkanoid
 
                 case Keys.Escape:
                     gameTimer.Stop();
-                    if (MessageBox.Show("Выйти из игры?", "Завершение игры", MessageBoxButtons.YesNo) == DialogResult.No)
+                    if (MessageBox.Show("Р’С‹Р№С‚Рё РёР· РёРіСЂС‹?", "Р—Р°РІРµСЂС€РµРЅРёРµ РёРіСЂС‹", MessageBoxButtons.YesNo) == DialogResult.No)
                     {
                         gameTimer.Start();
                     }
@@ -210,7 +210,7 @@ namespace Arkanoid
             g.DrawEllipse(Pens.Black, ball.Bounds);
         }
         /// <summary>
-        /// Создание скруглкнной платформы
+        /// РЎРѕР·РґР°РЅРёРµ СЃРєСЂСѓРіР»РєРЅРЅРѕР№ РїР»Р°С‚С„РѕСЂРјС‹
         /// </summary>
         private GraphicsPath CreateRoundedRectanglePath(int x, int y, int width, int height, int radius)
         {
@@ -259,7 +259,7 @@ namespace Arkanoid
         {
             Label controlsLabel = new Label
             {
-                Text = "Управление: мышь - двигать платформу, ПРОБЕЛ - начать, ESC - выход",
+                Text = "РЈРїСЂР°РІР»РµРЅРёРµ: РјС‹С€СЊ - РґРІРёРіР°С‚СЊ РїР»Р°С‚С„РѕСЂРјСѓ, РџР РћР‘Р•Р› - РЅР°С‡Р°С‚СЊ, ESC - РІС‹С…РѕРґ",
                 AutoSize = true,
                 BackColor = Color.Transparent,
                 Font = new Font("Arial", 9, FontStyle.Bold),
