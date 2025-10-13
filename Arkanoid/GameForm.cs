@@ -1,3 +1,4 @@
+using System.Drawing.Drawing2D;
 using Arkanoid.Clases;
 
 namespace Arkanoid
@@ -47,8 +48,8 @@ namespace Arkanoid
             var brickHeight = 50;
             var brickSpacing = 5;
             var brickMargin = 2;
-            float availableWidth = this.Width - (2 * brickMargin) - ((bricksPerRow - 1) * brickSpacing);
-            float brickWidth = availableWidth / bricksPerRow;
+            var availableWidth = this.Width - (2 * brickMargin) - ((bricksPerRow - 1) * brickSpacing);
+            var brickWidth = availableWidth / bricksPerRow;
             
 
             Color[] colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.DarkBlue };
@@ -76,14 +77,14 @@ namespace Arkanoid
         private void Game_form_Load(object sender, EventArgs e)
         {
             MakingBricks();
-            Platform();
+            CreatePlatform();
             ball.Location = new Point(this.Width / 2 - ballSize / 2, this.Height - ballOffset);
         }
 
         /// <summary>
         /// генерация платформы
         /// </summary>
-        private void Platform()
+        private void CreatePlatform()
         {
             var platformWidth = 150;
             var platformHeight = 30;
@@ -153,7 +154,7 @@ namespace Arkanoid
 
         private void Game_form_MouseMove(object sender, MouseEventArgs e)
         {
-            int newX = e.X - platform.Width / 2;
+            var newX = e.X - platform.Width / 2;
 
             if (newX < 0)
             {
@@ -208,10 +209,40 @@ namespace Arkanoid
             g.FillEllipse(Brushes.White, ball.Bounds);
             g.DrawEllipse(Pens.Black, ball.Bounds);
         }
+        /// <summary>
+        /// Создание скруглкнной платформы
+        /// </summary>
+        private GraphicsPath CreateRoundedRectanglePath(int x, int y, int width, int height, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            Rectangle rect = new Rectangle(x, y, width - 1, height - 1);
 
+            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+            path.CloseAllFigures();
+
+            return path;
+        }
+        public void DrawPlatform(Graphics g, RoundedPlatform platform)
+        {
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            using (GraphicsPath path = CreateRoundedRectanglePath(
+                platform.X,
+                platform.Y,
+                platform.Width,
+                platform.Height,
+                platform.CornerRadius))
+            using (var brush = new SolidBrush(platform.Color))
+            {
+                g.FillPath(brush, path);
+            }
+        }
         private void GameForm_Paint(object sender, PaintEventArgs e)
         {
-            platform.Draw(e.Graphics);
+            DrawPlatform(e.Graphics, platform);
             DrawBall(e.Graphics, ball);
         }
 

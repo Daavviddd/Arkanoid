@@ -26,37 +26,5 @@ namespace Arkanoid.Clases
             Location = new Point(x, y);
         }
 
-        /// <summary>
-        /// Отрисовка платформы
-        /// </summary>
-        public void Draw(Graphics g)
-        {
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            using (GraphicsPath path = CreateRoundedRectanglePath(0, 0, Width, Height, CornerRadius))
-            using (var brush = new SolidBrush(Color))
-            {
-                g.TranslateTransform(Location.X, Location.Y);
-                g.FillPath(brush, path);
-                g.ResetTransform();
-            }
-        }
-
-        /// <summary>
-        /// Создание скруглкнной платформы
-        /// </summary>
-        private GraphicsPath CreateRoundedRectanglePath(int x, int y, int width, int height, int radius)
-        {
-            GraphicsPath path = new GraphicsPath();
-            Rectangle rect = new Rectangle(x, y, width - 1, height - 1);
-
-            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
-            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
-            path.CloseAllFigures();
-
-            return path;
-        }
     }
 }
