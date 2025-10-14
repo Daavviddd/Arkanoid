@@ -78,6 +78,7 @@ namespace Arkanoid
         {
             MakingBricks();
             CreatePlatform();
+
             ball.Location = new Point(this.Width / 2 - ballSize / 2, this.Height - ballOffset);
         }
 
@@ -166,6 +167,7 @@ namespace Arkanoid
             }
 
             platform.SetLocation(newX, platform.Location.Y);
+
             if (!gameStarted)
             {
                 ball.Location = new Point(newX + platform.Width / 2 - ball.Width / 2, ball.Location.Y);
@@ -178,6 +180,7 @@ namespace Arkanoid
         private void Game_form_KeyDown(object sender, KeyEventArgs e)
         {
             var ballSpeed = 5;
+
             switch (e.KeyCode)
             {
                 case Keys.Space:
@@ -249,6 +252,7 @@ namespace Arkanoid
         private void GameForm_ResizeEnd(object sender, EventArgs e)
         {
             var controlsLabel = this.Controls.Find("controlsLabel", false).FirstOrDefault();
+
             if (controlsLabel != null)
             {
                 controlsLabel.Location = new Point(10, this.Height - 30);

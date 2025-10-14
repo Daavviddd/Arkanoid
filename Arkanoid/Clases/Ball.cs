@@ -8,6 +8,7 @@ namespace Arkanoid.Clases
         public Size Size { get; set; }
         public int VelocityX { get; set; }
         public int VelocityY { get; set; }
+
         public int X => Location.X;
         public int Y => Location.Y;
         public int Width => Size.Width;
