@@ -110,6 +110,5 @@ namespace Arkanoid.Clases
         {
             VelocityX = -VelocityX;
         }
-
     }
 }
