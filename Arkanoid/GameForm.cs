@@ -4,7 +4,7 @@ using Arkanoid.Clases;
 namespace Arkanoid
 {
     public partial class GameForm : Form
-    {   
+    {
         int ballSize = 20;
         int ballOffset = 150;
 
@@ -50,7 +50,7 @@ namespace Arkanoid
             var brickMargin = 2;
             var availableWidth = this.Width - (2 * brickMargin) - ((bricksPerRow - 1) * brickSpacing);
             var brickWidth = availableWidth / bricksPerRow;
-            
+
 
             Color[] colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.DarkBlue };
 
