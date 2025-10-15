@@ -228,6 +228,9 @@ namespace Arkanoid
 
             return path;
         }
+        /// <summary>
+        /// Отрисовка скругленной платформы
+        /// </summary>
         public void DrawPlatform(Graphics g, RoundedPlatform platform)
         {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
