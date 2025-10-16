@@ -96,7 +96,7 @@ namespace Arkanoid.Clases
         }
 
         /// <summary>
-        /// отскок мяча от горизонтальных поверхностей
+        /// отскок от горизонтальных поверхностей
         /// </summary>
         public void BounceHorizontal()
         {
@@ -104,11 +104,12 @@ namespace Arkanoid.Clases
         }
 
         /// <summary>
-        /// отскок мяча от вертикальных поверхностей
+        /// отскок от вертикальных поверхностей
         /// </summary>
         public void BounceVertical()
         {
             VelocityX = -VelocityX;
         }
+
     }
 }
