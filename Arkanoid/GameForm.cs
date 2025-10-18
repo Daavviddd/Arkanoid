@@ -10,7 +10,7 @@ namespace Arkanoid
         int ballSize = 20;
         int ballOffset = 150;
 
-        List<PictureBox> bricksPoint = new List<PictureBox>();
+        List<PictureBox> bricksList = new List<PictureBox>();
         RoundedPlatform platform;
         bool gameStarted = false;
         Ball ball;
@@ -71,7 +71,7 @@ namespace Arkanoid
                     brick.BorderStyle = BorderStyle.FixedSingle;
 
                     this.Controls.Add(brick);
-                    bricksPoint.Add(brick);
+                    bricksList.Add(brick);
                 }
             }
         }
@@ -116,14 +116,14 @@ namespace Arkanoid
                 ball.BounceHorizontal();
             }
 
-            for (int i = bricksPoint.Count - 1; i >= 0; i--)
+            for (int i = bricksList.Count - 1; i >= 0; i--)
             {
-                var brick = bricksPoint[i];
+                var brick = bricksList[i];
                 if (ball.Bounds.IntersectsWith(brick.Bounds))
                 {
                     ball.BounceHorizontal();
                     this.Controls.Remove(brick);
-                    bricksPoint.RemoveAt(i);
+                    bricksList.RemoveAt(i);
                     break;
                 }
             }
@@ -137,7 +137,7 @@ namespace Arkanoid
                 }
             }
 
-            if (bricksPoint.Count == 0)
+            if (bricksList.Count == 0)
             {
                 gameTimer.Stop();
                 MessageBox.Show("YOU WIN!", "Победа!", MessageBoxButtons.OK, MessageBoxIcon.Information);
