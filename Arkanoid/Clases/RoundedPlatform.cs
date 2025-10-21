@@ -5,22 +5,22 @@ namespace Arkanoid.Clases
     public class RoundedPlatform
     {
         /// <summary>
-        ///  позиция платформы на форме
+        ///  Позиция платформы на форме
         /// </summary>
         public Point Location { get; set; }
 
         /// <summary>
-        /// размер
+        /// Размер
         /// </summary>
         public Size Size { get; set; }
 
         /// <summary>
-        /// цвет платформы
+        /// Цвет платформы
         /// </summary>
         public Color Color { get; set; } = Color.Black;
 
         /// <summary>
-        /// радус скругления платформы
+        /// Радус скругления платформы
         /// </summary>
         public int CornerRadius { get; set; } = 15;
 
@@ -35,32 +35,28 @@ namespace Arkanoid.Clases
         public int Y => Location.Y;
 
         /// <summary>
-        /// ширина платформы
+        /// Ширина платформы
         /// </summary>
         public int Width => Size.Width;
 
         /// <summary>
-        /// высота платформы
+        /// Высота платформы
         /// </summary>
         public int Height => Size.Height;
 
         /// <summary>
-        /// граница платформы
+        /// Граница платформы
         /// </summary>
         public Rectangle Bounds => new Rectangle(Location, Size);
 
         /// <summary>
-        /// конструктор по умолчанию
+        /// Конструктор по умолчанию
         /// </summary>
         public RoundedPlatform() { }
 
         /// <summary>
-        /// конструктор с координатами
+        /// Конструктор с координатами
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
         public RoundedPlatform(int x, int y, int width, int height)
         {
             Location = new Point(x, y);
@@ -68,10 +64,8 @@ namespace Arkanoid.Clases
         }
 
         /// <summary>
-        /// установка новой позиции
+        /// Установка новой позиции
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
         public void SetLocation(int x, int y)
         {
             Location = new Point(x, y);

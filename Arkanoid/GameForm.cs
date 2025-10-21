@@ -85,7 +85,7 @@ namespace Arkanoid
         }
 
         /// <summary>
-        /// генерация платформы
+        /// Генерация платформы
         /// </summary>
         private void CreatePlatform()
         {

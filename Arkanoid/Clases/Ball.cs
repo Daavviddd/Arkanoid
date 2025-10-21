@@ -5,22 +5,22 @@ namespace Arkanoid.Clases
     internal class Ball
     {
         /// <summary>
-        /// позиция мяча
+        /// Позиция мяча
         /// </summary>
         public Point Location { get; set; }
 
         /// <summary>
-        /// рахмер мяча
+        /// Размер мяча
         /// </summary>
         public Size Size { get; set; }
 
         /// <summary>
-        /// скорость мяча по X
+        /// Скорость мяча по X
         /// </summary>
         public int VelocityX { get; set; }
 
         /// <summary>
-        /// скорость мяча по Y
+        /// Скорость мяча по Y
         /// </summary>
         public int VelocityY { get; set; }
 
@@ -40,7 +40,7 @@ namespace Arkanoid.Clases
         public int Width => Size.Width;
 
         /// <summary>
-        /// высота мяча
+        /// Высота мяча
         /// </summary>
         public int Height => Size.Height;
 
@@ -65,18 +65,13 @@ namespace Arkanoid.Clases
         public int Bottom => Location.Y + Height;
 
         /// <summary>
-        /// границы мяча
+        /// Границы мяча
         /// </summary>
         public Rectangle Bounds => new Rectangle(Location, Size);
 
         /// <summary>
-        /// конструктор мяча с заданными параметрами
+        /// Конструктор мяча с заданными параметрами
         /// </summary>
-        /// <param name="startX"></param>
-        /// <param name="startY"></param>
-        /// <param name="velocityX"></param>
-        /// <param name="velocityY"></param>
-        /// <param name="size"></param>
         public Ball(int startX, int startY, int velocityX, int velocityY, int size)
         {
             this.Location = new Point(startX, startY);
@@ -86,7 +81,7 @@ namespace Arkanoid.Clases
         }
 
         /// <summary>
-        /// перемещение мяча 
+        /// Перемещение мяча 
         /// </summary>
         public void BallMove()
         {
@@ -96,7 +91,7 @@ namespace Arkanoid.Clases
         }
 
         /// <summary>
-        /// отскок от горизонтальных поверхностей
+        /// Отскок от горизонтальных поверхностей
         /// </summary>
         public void BounceHorizontal()
         {
@@ -104,11 +99,12 @@ namespace Arkanoid.Clases
         }
 
         /// <summary>
-        /// отскок от вертикальных поверхностей
+        /// Отскок от вертикальных поверхностей
         /// </summary>
         public void BounceVertical()
         {
             VelocityX = -VelocityX;
         }
+
     }
 }
